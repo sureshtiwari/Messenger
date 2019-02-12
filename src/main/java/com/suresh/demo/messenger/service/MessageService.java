@@ -1,6 +1,7 @@
 package com.suresh.demo.messenger.service;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 import java.util.Map;
 
@@ -21,6 +22,28 @@ public class MessageService {
 	public List<Message> getAllMessages(){
 		return new ArrayList<Message>(messages.values());
 		
+	}
+	
+	public List<Message> getAllMessagesPerYear(int year)
+	{
+		List<Message> messageFdorYear = new ArrayList<>();
+		Calendar cal = Calendar.getInstance();
+		for(Message message:messages.values())
+		{
+			cal.setTime(message.getCreated());
+			if(cal.get(Calendar.YEAR)==year)
+			{
+				messageFdorYear.add(message);
+			}
+		}
+		return messageFdorYear;
+	}
+	
+	public List<Message> getAllMessagesPaginated(int start, int size)
+	{
+		ArrayList<Message> list = new ArrayList<>(messages.values());
+		if(start+size>list.size()) return new ArrayList<Message>();
+		return list.subList(start, start+size);
 	}
 	
 	public Message getMessage(Long id){
@@ -46,5 +69,7 @@ public class MessageService {
 	{
 		return messages.remove(id);
 	}
+	
+	
 
 }
